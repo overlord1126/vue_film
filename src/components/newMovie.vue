@@ -71,6 +71,7 @@
 	}
 	
 	#hot span{
+		display: block;
 		font: 12px/12px "微软雅黑";
 	}
 </style>
