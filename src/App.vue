@@ -1,23 +1,77 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <router-view></router-view>
+  <div style="height:100%;">
+  	<view-box id="viewBox" ref="viewBox">
+	    <x-header
+	    	slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;"
+	    	:left-options={showBack:isShowBack}	
+	    >主页</x-header>
+	    <router-view></router-view>
+	    <!--<p v-for=" i in 40 ">{{i}}</p>-->
+			
+			<tabbar id="tabbar" 
+			style="width:100%;position:absolute;left:0;bottm:0;z-index:100;">
+			  <tabbar-item 
+			  	:show-dot="false"
+					selected		
+					link="/newMovie"
+			  >
+			    <img slot="icon" src="">
+			    <span slot="label">
+			    	新电影
+			    </span>
+			  </tabbar-item>
+			  <tabbar-item link="/myFilm">
+			    <img slot="icon" src="">
+			    <span slot="label">
+			    	我的
+			    </span>
+			  </tabbar-item>
+			  <tabbar-item badge="2">
+			    <img slot="icon" src="">
+			    <span slot="label">前端</span>
+			  </tabbar-item>
+			</tabbar>
+			
+		</view-box>	
   </div>
 </template>
 
 <script>
+import { ViewBox, XHeader, Tabbar, TabbarItem  } from 'vux'
 export default {
-  name: 'app'
+  data(){
+  	return {
+  		isShowBack : false,
+  		
+  	}
+  },
+  
+  components: {
+    XHeader ,
+    Tabbar,
+    TabbarItem,
+    ViewBox
+  }
 }
 </script>
-
+<style lang="less">
+	@import '~vux/src/styles/reset.less';
+</style>
 <style>
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+#viewBox{
+	box-sizing: border-box;
+	/*padding-bottom: 50px;*/
+	padding-top: 40px;
+}	
+#tabbar .weui-tabbar__label{
+	/*color: red;*/
 }
 </style>
