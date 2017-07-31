@@ -72,6 +72,8 @@
 	
 	#hot span{
 		display: block;
+		text-align: center;
+		/*shanchu*/
 		font: 12px/12px "微软雅黑";
 	}
 </style>
