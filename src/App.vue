@@ -26,7 +26,7 @@
 			    	我的
 			    </span>
 			  </tabbar-item>
-			  <tabbar-item badge="2">
+			  <tabbar-item>
 			    <img slot="icon" src="">
 			    <span slot="label">前端</span>
 			  </tabbar-item>
@@ -42,7 +42,6 @@ export default {
   data(){
   	return {
   		isShowBack : false,
-  		
   	}
   },
   
@@ -69,9 +68,14 @@ export default {
 #viewBox{
 	box-sizing: border-box;
 	/*padding-bottom: 50px;*/
-	padding-top: 40px;
+	padding-top: 46px;
 }	
-#tabbar .weui-tabbar__label{
-	/*color: red;*/
+#tabbar {
+	background-color: #000;
 }
+#tabbar:before{
+	display: none;
+}
+
+
 </style>

@@ -1,46 +1,51 @@
 <template>
 	<div id="box">
-		<group class="group">
-			<cell title="影院热映" value="更多"></cell>
-		</group>
-		<ul id="hot">
-			<li v-for="( item,index ) in hotList"
-				
-			>
-				<img :src="item.imgM"/>
-				<span>{{item.title}}</span>
-			</li>
-		</ul>
+		<list :list="hotList" :title="title1" :rightTitle="rightTitle"></list>
+		<list :list="comingList" :title="title2" :rightTitle="rightTitle"></list>
 	</div>	
 </template>
 <script>
 	var jsonp = require("jsonp");
-	import { Cell, Group } from 'vux'
+	import List from '@/components/com/list'
 	export default{
 		data(){
 			return {
 				hotList:[],
-//				list1:[],
-//				list1:[],
+				rightTitle:"更多",
+				title1:"影院热映",
+				comingList:[],
+				title2:"即将上映",
 			}
 		},
 		components : {
-			Cell, 
-			Group,
+			List,
 		},
 		created(){
 			var that = this;
 			jsonp('https://api.douban.com/v2/movie/in_theaters?count=6',null,function(res,data){
-				console.log(data);
+//				console.log(data);
 				that.hotList = data.subjects.map( (item)=>{
 					return {
 					  url: 'javascript:',
 					  imgL: item.images.large,
 					  imgM: item.images.medium,
-					  title: item.title
+					  title: item.title,
+					  rating: item.rating.average,
 					}
 				} )
-			});
+			})
+			jsonp('https://api.douban.com/v2/movie/coming_soon?count=6',null,function(res,data){
+				console.log(data);
+				that.comingList = data.subjects.map( (item)=>{
+					return {
+					  url: 'javascript:',
+					  imgL: item.images.large,
+					  imgM: item.images.medium,
+					  title: item.title,
+					  rating: item.rating.average,
+					}
+				} )
+			})
 		}
 	}
 
@@ -54,26 +59,65 @@
 		list-style: none;
 	}
 	/*weui-cells*/
+	
+	.rater.weui-cell{
+		padding: 0;
+		text-align: center;
+	}
+		
 	#box .weui-cells{
 		margin: 0;
 	}
+	#hot {
+		overflow: hidden;
+	}
+		
+	#hot .weui-cells{
+		font-size: 0px;
+	}
 	#hot li{
-		background-color: pink;
 		text-align: center;
 		float: left;
 		width: 33.333%;
-		padding-top: 20px;
+		height: 180px;
+		padding-top: 10px;
+		/*background-color: #0ff;*/
+		
+		/*border: 1px solid #000;*/
+		/*box-sizing: border-box;*/
 	}
 	
 	#hot li img{
 		width: 90px;
 		height: 130px;
 	}
-	
-	#hot span{
+	#hot .weui-cells__title{
+		display: inline-block;
+		padding: 0;
+	}
+	#hot .weui-cells__title{
+		margin: 0;
+	}
+	#hot .title{
 		display: block;
-		text-align: center;
-		/*shanchu*/
-		font: 12px/12px "微软雅黑";
+		/*background-color: #f00;*/
+		font: 14px/16px "微软雅黑";
+	}
+	#hot .tempNo{
+		margin-top: 3px;
+		font-size: 12px;
+		display: inline-block;
+		color: #ccc;
+	}
+	#hot .weui-cells.vux-no-group-title:before,
+	#hot .weui-cells.vux-no-group-title:after{
+		display: none;
+	}
+	.ratingGroup {
+		font-size: 0;
+		margin-top: 5px;
+	}
+	.ratingNum{
+		font-size: 12px;
 	}
 </style>
