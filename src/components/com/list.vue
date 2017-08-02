@@ -1,7 +1,7 @@
 <template>
 	<div id="box">
-		<group class="group">
-			<cell :title="title" :value="rightTitle"></cell>
+		<group class="group" >
+			<cell :title="title" :value="rightTitle" @click.native="clickTitle" ></cell>
 		</group>
 		<ul id="hot">
 			<li v-for="( item,index ) in list">
@@ -28,6 +28,11 @@
 			Group,
 			Rater,
 		},
+		methods:{
+			clickTitle(){
+				this.$emit("clickTitle");
+			}
+		}
     }
 </script>
 <style>
