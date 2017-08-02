@@ -1,12 +1,23 @@
 <template>
-	<div>
+	<div id="box">
 		<!--{{ this.$route.params.id }}-->
-		<panel :header="title" :list="hotList" type="5"></panel>
+		<!--<panel :header="title" :list="hotList" type="5"></panel>-->
+		<swipeout>
+			<swipeout-item v-for="(item , index) in hotList" transition-mode="follow"  key=index>
+		        <div slot="right-menu">
+		        	<swipeout-button type="primary">收藏</swipeout-button>
+		        	<swipeout-button type="warn">删除</swipeout-button>
+		        </div>
+		        <div slot="content" class="demo-content vux-1px-t">
+		        	<panel class="pannel" :list="[hotList[index]]" type="5"></panel>
+		        </div>
+	    	</swipeout-item>
+	    </swipeout>
 	</div>
 </template>
 <script>
 	var jsonp = require("jsonp");
-	import { Panel } from 'vux'
+	import { Panel, Swipeout, SwipeoutItem, SwipeoutButton} from 'vux'
     export default{
     	data(){
     		return {
@@ -16,6 +27,9 @@
     	},
     	components:{
     		Panel,
+    		Swipeout,
+		    SwipeoutItem,
+		    SwipeoutButton,
     	},
     	created(){
     		var that = this;
@@ -32,12 +46,18 @@
 						  desc: "主演："+item.casts.map((a)=>{ return a.name }).join("、")
 						}
 					} )
-					
 				})
 			}
     	}
     }
 </script>
 <style>
-	
+	#box .weui-panel__hd{
+		font-size: 18px;
+	}
+	#box .pannel .weui-media-box_appmsg,
+	#box .pannel .weui-media-box__hd,
+	#box .pannel img{
+		height: 80px;
+	}
 </style>
