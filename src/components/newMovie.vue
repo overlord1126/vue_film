@@ -20,32 +20,38 @@
 		components : {
 			List,
 		},
-		created(){
+		mounted(){
+//			console.log( 1 )
 			var that = this;
-			jsonp('https://api.douban.com/v2/movie/in_theaters?count=6',null,function(res,data){
-//				console.log(data);
-				that.hotList = data.subjects.map( (item)=>{
-					return {
-					  url: 'javascript:',
-					  imgL: item.images.large,
-					  imgM: item.images.medium,
-					  title: item.title,
-					  rating: item.rating.average,
-					}
-				} )
-			})
-			jsonp('https://api.douban.com/v2/movie/coming_soon?count=6',null,function(res,data){
-				console.log(data);
-				that.comingList = data.subjects.map( (item)=>{
-					return {
-					  url: 'javascript:',
-					  imgL: item.images.large,
-					  imgM: item.images.medium,
-					  title: item.title,
-					  rating: item.rating.average,
-					}
-				} )
-			})
+			if( that.hotList.length == 0 ){
+				jsonp('https://api.douban.com/v2/movie/in_theaters?count=6',null,function(res,data){
+					console.log(data);
+					that.hotList = data.subjects.map( (item)=>{
+						return {
+						  url: 'javascript:',
+						  imgL: item.images.large,
+						  imgM: item.images.medium,
+						  title: item.title,
+						  rating: item.rating.average,
+						}
+					} )
+				})
+			}
+			if( that.comingList.length == 0 ){
+				jsonp('https://api.douban.com/v2/movie/coming_soon?count=6',null,function(res,data){
+					console.log(data);
+					that.comingList = data.subjects.map( (item)=>{
+						return {
+						  url: 'javascript:',
+						  imgL: item.images.large,
+						  imgM: item.images.medium,
+						  title: item.title,
+						  rating: item.rating.average,
+						}
+					} )
+				})
+			}
+			
 		}
 	}
 

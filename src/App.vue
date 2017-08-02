@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%;">
+  <div style="height:100%; position: relative;">
   	<view-box id="viewBox" ref="viewBox">
 	    <x-header
 	    	slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;"
