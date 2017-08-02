@@ -6,7 +6,7 @@
 			<swipeout-item v-for="(item , index) in hotList" transition-mode="follow"  key=index>
 		        <div slot="right-menu">
 		        	<swipeout-button type="primary">收藏</swipeout-button>
-		        	<swipeout-button type="warn">删除</swipeout-button>
+		        	<swipeout-button type="warn" @click.native="del(index)">不喜欢</swipeout-button>
 		        </div>
 		        <div slot="content" class="demo-content vux-1px-t">
 		        	<panel class="pannel" :list="[hotList[index]]" type="5"></panel>
@@ -31,6 +31,12 @@
 		    SwipeoutItem,
 		    SwipeoutButton,
     	},
+    	methods:{
+    		del(index){
+//  			alert("删除")
+				this.hotList.splice( index,1 );
+    		}
+    	},
     	created(){
     		var that = this;
 //  		console.log(this.$route.params.id);
@@ -40,6 +46,7 @@
 					console.log( data );
 					that.hotList = data.subjects.map( (item)=>{
 						return {
+//						链接
 						  url: item.alt,
 						  src: item.images.small,
 						  title: item.title,
