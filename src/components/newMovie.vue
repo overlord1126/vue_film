@@ -1,8 +1,13 @@
 <template>
-	<div id="box">
-		<list :list="hotList" :title="title1" :rightTitle="rightTitle" @clickTitle="jupm('hotList')"></list>
-		<list :list="comingList" :title="title2" :rightTitle="rightTitle" @clickTitle="jupm('comingList')"></list>
-	</div>	
+	
+	<scroller 
+		:onRefresh="re"
+        ref="my_scroller">
+		<div id="box">
+			<list :list="hotList" :title="title1" :rightTitle="rightTitle" @clickTitle="jupm('hotList')"></list>
+			<list :list="comingList" :title="title2" :rightTitle="rightTitle" @clickTitle="jupm('comingList')"></list>
+		</div>
+	</scroller>
 </template>
 <script>
 	var jsonp = require("jsonp");
@@ -24,66 +29,62 @@
 			jupm(target){
 //				带参数跳转到more页面
 				this.$router.push({path:"/more/"+target})
+			},
+			re(){
+				this.$vux.toast.show({
+					text: '刷新完成',
+					time: 500,
+				})
+				localStorage.clear();
+				this.getData();
+				this.$refs.my_scroller.finishPullToRefresh();
+			},
+			getData(){
+				var that = this;
+				
+	//			判断如果有对应的hotList在本地存储中
+				if( !localStorage.getItem("hotList") ){
+	//			if( 1 ){
+					console.log(1111)
+					jsonp('https://api.douban.com/v2/movie/in_theaters?count=6',null,function(res,data){
+						console.log( data );
+						that.hotList = data.subjects.map( (item)=>{
+							return {
+							  url: 'javascript:',
+							  imgL: item.images.large,
+							  imgM: item.images.medium,
+							  title: item.title,
+							  rating: item.rating.average,
+							}
+						} )
+						localStorage.setItem("hotList",JSON.stringify( that.hotList ));
+					})
+				}else{
+					that.hotList = JSON.parse( localStorage.getItem("hotList") );
+				}
+				
+				if( !localStorage.getItem("comingList") ){
+					console.log(2222)
+					jsonp('https://api.douban.com/v2/movie/coming_soon?count=6',null,function(res,data){
+						var comingList = data.subjects.map( (item)=>{
+							return {
+							  url: 'javascript:',
+							  imgL: item.images.large,
+							  imgM: item.images.medium,
+							  title: item.title,
+							  rating: item.rating.average,
+							}
+						} )
+						localStorage.setItem("comingList",JSON.stringify( comingList ));
+					})
+				}else{
+					this.comingList = JSON.parse( localStorage.getItem("comingList") );
+				}
+				
 			}
 		},
 		created(){
-			var that = this;
-//			localStorage.clear();
-
-//			判断如果有对应的hotList在本地存储中
-			if( !localStorage.getItem("hotList") ){
-//			if( 1 ){
-//				console.log(1111)
-				jsonp('https://api.douban.com/v2/movie/in_theaters?count=6',null,function(res,data){
-					console.log( data );
-					that.hotList = data.subjects.map( (item)=>{
-						return {
-						  url: 'javascript:',
-						  imgL: item.images.large,
-						  imgM: item.images.medium,
-						  title: item.title,
-						  rating: item.rating.average,
-						}
-					} )
-					localStorage.setItem("hotList",JSON.stringify( that.hotList ));
-				})
-			}else{
-				that.hotList = JSON.parse( localStorage.getItem("hotList") );
-			}
-			
-			if( !localStorage.getItem("comingList") ){
-				console.log(2222)
-				jsonp('https://api.douban.com/v2/movie/coming_soon?count=6',null,function(res,data){
-					var comingList = data.subjects.map( (item)=>{
-						return {
-						  url: 'javascript:',
-						  imgL: item.images.large,
-						  imgM: item.images.medium,
-						  title: item.title,
-						  rating: item.rating.average,
-						}
-					} )
-					localStorage.setItem("comingList",JSON.stringify( comingList ));
-				})
-			}else{
-				this.comingList = JSON.parse( localStorage.getItem("comingList") );
-			}
-			
-//			if( that.comingList.length == 0 ){
-//				jsonp('https://api.douban.com/v2/movie/coming_soon?count=6',null,function(res,data){
-//					console.log(data);
-//					that.comingList = data.subjects.map( (item)=>{
-//						return {
-//						  url: 'javascript:',
-//						  imgL: item.images.large,
-//						  imgM: item.images.medium,
-//						  title: item.title,
-//						  rating: item.rating.average,
-//						}
-//					} )
-//				})
-//			}
-			
+			this.getData();
 		}
 	}
 
