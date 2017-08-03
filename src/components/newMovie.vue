@@ -31,11 +31,11 @@
 				this.$router.push({path:"/more/"+target})
 			},
 			re(){
+				localStorage.clear();
 				this.$vux.toast.show({
 					text: '刷新完成',
 					time: 500,
 				})
-				localStorage.clear();
 				this.getData();
 				this.$refs.my_scroller.finishPullToRefresh();
 			},
@@ -66,7 +66,7 @@
 				if( !localStorage.getItem("comingList") ){
 					console.log(2222)
 					jsonp('https://api.douban.com/v2/movie/coming_soon?count=6',null,function(res,data){
-						var comingList = data.subjects.map( (item)=>{
+						that.comingList = data.subjects.map( (item)=>{
 							return {
 							  url: 'javascript:',
 							  imgL: item.images.large,
@@ -75,7 +75,7 @@
 							  rating: item.rating.average,
 							}
 						} )
-						localStorage.setItem("comingList",JSON.stringify( comingList ));
+						localStorage.setItem("comingList",JSON.stringify( that.comingList ));
 					})
 				}else{
 					this.comingList = JSON.parse( localStorage.getItem("comingList") );
