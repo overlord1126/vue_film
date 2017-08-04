@@ -34,7 +34,6 @@
 			    <span slot="label">前端</span>
 			  </tabbar-item>
 			</tabbar>
-			
 				<!--</view-box>-->
   </div>
 </template>
@@ -45,7 +44,7 @@ import { ViewBox, XHeader, Tabbar, TabbarItem  } from 'vux'
 export default {
   data(){
   	return {
-  		isShowBack : false,
+  		isShowBack : true,
   	}
   },
   methods:{
@@ -58,6 +57,11 @@ export default {
     Tabbar,
     TabbarItem,
     ViewBox
+  },
+  created(){
+		if( location.hash == "#/newMovie"){
+			this.isShowBack = false
+		}
   }
 }
 </script>

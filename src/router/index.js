@@ -4,6 +4,7 @@ import Hello from '@/components/Hello'
 import NewMovie from '@/components/newMovie'
 import MyFilm from '@/components/myFilm'
 import More from '@/components/com/more'
+import Detail from '@/components/detail'
 
 Vue.use(Router)
 
@@ -30,6 +31,12 @@ export default new Router({
       path: '/more/:id',
       name: 'more',
       component: More
+    },
+    {
+    	//点击更多
+      path: '/detail/:id',
+      name: 'detail',
+      component: Detail
     },
   ]
 })

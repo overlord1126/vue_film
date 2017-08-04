@@ -4,8 +4,8 @@
 		:onRefresh="re"
         ref="my_scroller">
 		<div id="box">
-			<list :list="hotList" :title="title1" :rightTitle="rightTitle" @clickTitle="jupm('hotList')"></list>
-			<list :list="comingList" :title="title2" :rightTitle="rightTitle" @clickTitle="jupm('comingList')"></list>
+			<list :list="hotList" :title="title1" :rightTitle="rightTitle" @clickTitle="jump('hotList')" ></list>
+			<list :list="comingList" :title="title2" :rightTitle="rightTitle" @clickTitle="jump('comingList')"></list>
 		</div>
 	</scroller>
 </template>
@@ -26,7 +26,10 @@
 			List,
 		},
 		methods: {
-			jupm(target){
+			say(){
+				alert(1)
+			},
+			jump(target){
 //				带参数跳转到more页面
 				this.$router.push({path:"/more/"+target})
 			},
@@ -34,7 +37,7 @@
 				localStorage.clear();
 				this.$vux.toast.show({
 					text: '刷新完成',
-					time: 500,
+					time: 1000,
 				})
 				this.getData();
 				this.$refs.my_scroller.finishPullToRefresh();
@@ -50,11 +53,12 @@
 						console.log( data );
 						that.hotList = data.subjects.map( (item)=>{
 							return {
-							  url: 'javascript:',
-							  imgL: item.images.large,
-							  imgM: item.images.medium,
-							  title: item.title,
-							  rating: item.rating.average,
+								id: item.id,
+								url: 'javascript:',
+								imgL: item.images.large,
+								imgM: item.images.medium,
+								title: item.title,
+								rating: item.rating.average,
 							}
 						} )
 						localStorage.setItem("hotList",JSON.stringify( that.hotList ));
@@ -68,11 +72,12 @@
 					jsonp('https://api.douban.com/v2/movie/coming_soon?count=6',null,function(res,data){
 						that.comingList = data.subjects.map( (item)=>{
 							return {
-							  url: 'javascript:',
-							  imgL: item.images.large,
-							  imgM: item.images.medium,
-							  title: item.title,
-							  rating: item.rating.average,
+								id: item.id,
+								url: 'javascript:',
+								imgL: item.images.large,
+								imgM: item.images.medium,
+								title: item.title,
+								rating: item.rating.average,
 							}
 						} )
 						localStorage.setItem("comingList",JSON.stringify( that.comingList ));
@@ -107,14 +112,14 @@
 	#box .weui-cells{
 		margin: 0;
 	}
-	#hot {
+	.hot {
 		overflow: hidden;
 	}
 		
-	#hot .weui-cells{
+	.hot .weui-cells{
 		font-size: 0px;
 	}
-	#hot li{
+	.hot li{
 		text-align: center;
 		float: left;
 		width: 33.333%;
@@ -126,30 +131,30 @@
 		/*box-sizing: border-box;*/
 	}
 	
-	#hot li img{
+	.hot li img{
 		width: 90px;
 		height: 130px;
 	}
-	#hot .weui-cells__title{
+	.hot .weui-cells__title{
 		display: inline-block;
 		padding: 0;
 	}
-	#hot .weui-cells__title{
+	.hot .weui-cells__title{
 		margin: 0;
 	}
-	#hot .title{
+	.hot .title{
 		display: block;
 		/*background-color: #f00;*/
 		font: 14px/16px "微软雅黑";
 	}
-	#hot .tempNo{
+	.hot .tempNo{
 		margin-top: 3px;
 		font-size: 12px;
 		display: inline-block;
 		color: #ccc;
 	}
-	#hot .weui-cells.vux-no-group-title:before,
-	#hot .weui-cells.vux-no-group-title:after{
+	.hot .weui-cells.vux-no-group-title:before,
+	.hot .weui-cells.vux-no-group-title:after{
 		display: none;
 	}
 	.ratingGroup {

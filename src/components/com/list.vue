@@ -3,8 +3,8 @@
 		<group class="group" >
 			<cell :title="title" :value="rightTitle" @click.native="clickTitle" ></cell>
 		</group>
-		<ul id="hot">
-			<li v-for="( item,index ) in list">
+		<ul class="hot">
+			<li v-for="( item,index ) in list" @click="clickItem(item.id)">
 				<img :src="item.imgM"/>
 				<span class="title">{{item.title.slice(0,5)}}</span>
 				<!--<span>{{item.rating}}</span>-->
@@ -31,6 +31,10 @@
 		methods:{
 			clickTitle(){
 				this.$emit("clickTitle");
+			},
+			clickItem(a){
+				this.$router.push( {path:"/detail/"+a} )
+//				this.$emit("clickItem",a);
 			}
 		}
     }

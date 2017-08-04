@@ -1,7 +1,7 @@
 <template>
 	<scroller 
 		:onRefresh="re"
-		:onInfinite="loadMore"
+		:on-infinite="loadMore"
         ref="my_scroller">
 		<div id="box">
 			<!--{{ this.$route.params.id }}-->
@@ -67,18 +67,21 @@
     			this.count = 10;
     			this.$vux.toast.show({
 					text: '刷新完成',
-					time: 500,
+					time: 1000,
 				})
     			localStorage.clear();
 				this.getData();
 				this.$refs.my_scroller.finishPullToRefresh();
     		},
-    		loadMore(){
+    		loadMore:function(done){
 //  			console.log(1)
-//				this.start += this.count;
-//				this.count = 3;
+				this.start += this.count;
+				this.count = 3;
 //				console.log( this.start,this.count );
-//				this.$refs.my_scroller.finishInfinite();
+				this.$refs.my_scroller.finishInfinite(function(){
+					console.log(1)
+				})
+//				done()
     		}
     	},
     	created(){
