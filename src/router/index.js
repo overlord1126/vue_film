@@ -5,6 +5,7 @@ import NewMovie from '@/components/newMovie'
 import MyFilm from '@/components/myFilm'
 import More from '@/components/com/more'
 import Detail from '@/components/detail'
+import Cast from '@/components/cast'
 
 Vue.use(Router)
 
@@ -37,6 +38,12 @@ export default new Router({
       path: '/detail/:id',
       name: 'detail',
       component: Detail
+    },
+    {
+    	//演员
+      path: '/cast/:id',
+      name: 'cast',
+      component: Cast
     },
   ]
 })

@@ -1,35 +1,35 @@
 <template>
-	
-	<scroller 
-        ref="my_scroller"
-	>
-		<div class="movieBox">
-			<div class="imgBox">
-				<p class="contentLeft">
-					<span class="title">{{title}}</span>
-					<span class="originalTitle">又名：{{aka}}</span>
-					<rater disabled :value="ratingAverage" active-color="#FF9900" :margin="0" :font-size="10"></rater>
-					<span>{{ratings_count}}人评价</span>
-					<span class="year">{{year}}年/{{type}}/{{directors}}(导演)/{{castsName}}</span>
-				</p>
-				<img class="contentLeftRight" :src="postUrl"/>
-			</div>
-			<div class="summary">
-				<p>{{title}} 的剧情简介</p>
-				<p class="summaryText">{{showMore?summary.slice(0,60)+"...":summary}}<span class="more" v-if="showMore" @click="showMore=false">(更多)</span></p>
-			</div>
-			<div class="wishCount">
-				<span class="wish">{{wish_count}}人想要看</span>
-				<span class="already">{{collect_count}}12人已看过</span>
-			</div>
-			<div class="casts">
-				<h3>演员列表：</h3>
-				<ul>
-					<li></li>
+	<div class="movieBox">
+		<div class="imgBox">
+			<p class="contentLeft">
+				<span class="title">{{title}}</span>
+				<span class="originalTitle">又名：{{aka}}</span>
+				<rater disabled :value="ratingAverage" active-color="#FF9900" :margin="0" :font-size="10"></rater>
+				<span>{{ratings_count}}人评价</span>
+				<span class="year">{{year}}年/{{type}}/{{directors}}(导演)/{{castsName}}</span>
+			</p>
+			<img class="contentLeftRight" :src="postUrl"/>
+		</div>
+		<div class="summary">
+			<p>{{title}} 的剧情简介</p>
+			<p class="summaryText">{{showMore?summary.slice(0,60)+"...":summary}}<span class="more" v-if="showMore" @click="showMore=false">(更多)</span></p>
+		</div>
+		<div class="wishCount">
+			<span class="wish">{{wish_count}}人想要看</span>
+			<span class="already">{{collect_count}}12人已看过</span>
+		</div>
+		<div class="casts">
+			<h3>演员列表：</h3>
+			<div class="xBox">
+				<ul :style=listStyle>
+					<li v-for="(item,index) in casts" @click="jumpCast( item.id )">
+						<img :src="item.avatars.medium"/>
+						<div class="name">{{item.name}}</div>
+					</li>
 				</ul>
 			</div>
 		</div>
-	</scroller>
+	</div>
 </template>
 <script>
 	import { Rater } from 'vux';
@@ -51,6 +51,7 @@
     			showMore:true,
     			wish_count:0,
     			collect_count:0,
+    			
     		}
     	},
     	components:{
@@ -59,7 +60,11 @@
     	computed:{
     		castsName:function(){
     			return this.casts.map((a)=>{return a.name}).join("/");
+    		},
+    		listStyle:function(){
+    			return {width:this.casts.length*100+"px"}
     		}
+    		
     	},
     	methods:{
     		getDataById(id){
@@ -80,6 +85,9 @@
 					that.wish_count = data.wish_count;
 					that.collect_count = data.collect_count;
 				})
+    		},
+    		jumpCast(a){
+    			this.$router.push("/cast/"+a);
     		}
     	},
     	created(){
@@ -89,6 +97,11 @@
     }
 </script>
 <style>
+	ul{
+		padding: 0px;
+		margin: 0;
+		list-style: none;	
+	}
 	.title{
 		display: block;
 		font:  20px/40px "微软雅黑";
@@ -98,7 +111,7 @@
 		display: block;
 	}
 	.movieBox{
-		padding: 20px 20px 60px;
+		padding: 70px 20px 60px;
 		
 	}
 	.contentLeft{
@@ -154,5 +167,29 @@
 	}
 	.casts{
 		padding-top: 20px;
+	}
+	.xBox{
+		width: 100%;
+		overflow: auto;
+	}
+	.casts ul{
+		
+	}
+	.casts h3{
+		color: #777;
+	}
+	.casts li{
+		width: 100px;
+		float: left;
+		text-align: center;
+		box-sizing: border-box;
+		/*border: 1px solid #000;*/
+	} 
+	.casts img{
+		width: 85%;
+	}
+	.xBox li .name{
+		font: 14px/1.2 "微软雅黑";
+		color: #333;
 	}
 </style>
