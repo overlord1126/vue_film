@@ -49,7 +49,7 @@
 				if( !localStorage.getItem("hotList") ){
 	//			if( 1 ){
 					console.log(1111)
-					jsonp('https://api.douban.com/v2/movie/in_theaters?count=6',null,function(res,data){
+					jsonp('https://api.douban.com/v2/movie/in_theaters?count=9',null,function(res,data){
 						console.log( data );
 						that.hotList = data.subjects.map( (item)=>{
 							return {
@@ -69,7 +69,7 @@
 				
 				if( !localStorage.getItem("comingList") ){
 					console.log(2222)
-					jsonp('https://api.douban.com/v2/movie/coming_soon?count=6',null,function(res,data){
+					jsonp('https://api.douban.com/v2/movie/coming_soon?count=9',null,function(res,data){
 						that.comingList = data.subjects.map( (item)=>{
 							return {
 								id: item.id,
