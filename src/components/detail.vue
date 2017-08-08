@@ -10,6 +10,8 @@
 			</p>
 			<img class="contentLeftRight" :src="postUrl"/>
 		</div>
+		<!--<button class="Collection">收藏</button>-->
+		<coll-btn :isColl="isCollected" @clickBtn="toggleColl"></coll-btn>
 		<div class="summary">
 			<p>{{title}} 的剧情简介</p>
 			<p class="summaryText">{{showMore?summary.slice(0,60)+"...":summary}}<span class="more" v-if="showMore" @click="showMore=false">(更多)</span></p>
@@ -23,7 +25,7 @@
 			<div class="xBox">
 				<ul :style=listStyle>
 					<li v-for="(item,index) in casts" @click="jumpCast( item.id )">
-						<img :src="item.avatars.medium"/>
+						<img :src="item.avatars ? item.avatars.medium : item.medium" alt=""/>
 						<div class="name">{{item.name}}</div>
 					</li>
 				</ul>
@@ -33,6 +35,7 @@
 </template>
 <script>
 	import { Rater } from 'vux';
+	import CollBtn from "@/components/com/collBtn";
 	var jsonp = require("jsonp");
     export default {
     	data(){
@@ -51,11 +54,12 @@
     			showMore:true,
     			wish_count:0,
     			collect_count:0,
-    			
+    			movieList : JSON.parse( localStorage.getItem( "movie" ) ) || [],
     		}
     	},
     	components:{
 			Rater,
+			CollBtn,
     	},
     	computed:{
     		castsName:function(){
@@ -63,8 +67,14 @@
     		},
     		listStyle:function(){
     			return {width:this.casts.length*100+"px"}
+    		},
+    		isCollected:function(){
+    			if( this.movieList.includes( this.$route.params.id ) ){
+    				return true;
+    			}else{
+    				return false;
+    			}
     		}
-    		
     	},
     	methods:{
     		getDataById(id){
@@ -88,7 +98,30 @@
     		},
     		jumpCast(a){
     			this.$router.push("/cast/"+a);
-    		}
+    		},
+    		toggleColl(){
+    			let id = this.$route.params.id; 
+    			if( this.movieList.includes( id ) ){
+//  				删除，取消收藏
+					this.$vux.toast.show({
+						text: '取消收藏',
+						time: 800,
+					})
+    				this.movieList.splice( this.movieList.indexOf( id ),1 );
+    				this.isCollected = false;
+    			}else{
+//  				添加,加入收藏
+					this.$vux.toast.show({
+						text: '加入收藏',
+						time: 800,
+					})
+					this.movieList.push( id );
+					this.isCollected = true;
+    			}
+    			let str = JSON.stringify( this.movieList );
+    			localStorage.setItem( "movie",str );
+//  			console.log( localStorage );
+    		},
     	},
     	created(){
 //  		console.log( this.$route.params.id );
@@ -102,6 +135,15 @@
 		margin: 0;
 		list-style: none;	
 	}
+	.Collection{
+		background: none;
+		border: 1px solid orange;
+		border-radius: 5px;
+		color: orange;
+		font-size: 20px;
+		padding: 3px 30px; 
+	}
+
 	.title{
 		display: block;
 		font:  20px/40px "微软雅黑";
@@ -124,6 +166,7 @@
 		display: block;
 	}
 	.contentLeftRight{
+		padding-top: 30px;
 		float: right;
 		width: 40%;
 	}
@@ -186,7 +229,8 @@
 		/*border: 1px solid #000;*/
 	} 
 	.casts img{
-		width: 85%;
+		width: 85px;
+		height: 121px;
 	}
 	.xBox li .name{
 		font: 14px/1.2 "微软雅黑";

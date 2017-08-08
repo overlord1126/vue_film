@@ -15,7 +15,7 @@
 		<button class="Collection">收藏</button>
 		<div class="works">
 			<ul class="listBox" :style=listStyle>
-				<li v-for="(item,index) in works">
+				<li v-for="(item,index) in works" @click="jump(item.subject.id)">
 					<img :src="item.subject.images.medium"/>
 					<div>{{item.subject.original_title}}</div>
 					<div>{{item.subject.year}}年</div>
@@ -56,6 +56,9 @@
 					
 				})
     		},
+    		jump(a){
+    			this.$router.push( "/detail/"+a );
+    		},
     	},
     	created(){
     		this.getDataById(this.$route.params.id);
@@ -84,6 +87,7 @@
 			overflow: hidden;
 			.left{
 				float: left;
+				width: 50%;
 				padding-top:15px;
 			}
 			img{

@@ -11,7 +11,7 @@
 </template>
 <script>
 	var jsonp = require("jsonp");
-	import List from '@/components/com/list'
+	import List from '@/components/com/list';
 	export default{
 		data(){
 			return {
@@ -34,7 +34,9 @@
 				this.$router.push({path:"/more/"+target})
 			},
 			re(){
-				localStorage.clear();
+				localStorage.removeItem("hotList");
+				localStorage.removeItem("comingList");
+				
 				this.$vux.toast.show({
 					text: '刷新完成',
 					time: 1000,
@@ -48,7 +50,7 @@
 	//			判断如果有对应的hotList在本地存储中
 				if( !localStorage.getItem("hotList") ){
 	//			if( 1 ){
-					console.log(1111)
+//					console.log(1111)
 					jsonp('https://api.douban.com/v2/movie/in_theaters?count=9',null,function(res,data){
 						console.log( data );
 						that.hotList = data.subjects.map( (item)=>{
@@ -68,7 +70,7 @@
 				}
 				
 				if( !localStorage.getItem("comingList") ){
-					console.log(2222)
+//					console.log(2222)
 					jsonp('https://api.douban.com/v2/movie/coming_soon?count=9',null,function(res,data){
 						that.comingList = data.subjects.map( (item)=>{
 							return {
