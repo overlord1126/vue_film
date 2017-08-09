@@ -21,7 +21,7 @@
     	}
     }
 </script>
-<style>
+<style scoped>
 	button{
 		outline: none;
 		background: none;

@@ -3,23 +3,24 @@
 		<scroller 
         	ref="my_scroller">
 			<div>
-				<h2>我收藏的电影</h2>
+				<h2 class="title">我收藏的电影</h2>
 				<swipeout>
 					<swipeout-item v-for="(item , index) in movieList" transition-mode="follow"  key=index>
 				        <div slot="right-menu">
-				        	<swipeout-button type="warn" @click.native="del(index)">取消收藏</swipeout-button>
+				        	<swipeout-button type="warn" @click.native="del(index,item.id)">取消收藏</swipeout-button>
 				        </div>
 				        <div class="box" slot="content">
-				        	<img :src="item.src"/>
+				        	<img :src="item.postUrl"/>
 				        	<div class="rightBox">
-				        		<p> {{item.title}} </p>
+				        		<p class="rightBoxTitle"> {{item.title}} </p>
 				        		<p> {{item.castsName}} </p>
-				        		<p class="text"> {{item.desc}} </p>
+				        		<p class="text">简介： {{item.summary}} </p>
 				        	</div>
 				        </div>
 			    	</swipeout-item>
 			    </swipeout>
 			</div>
+			<div class="height"></div>
 		</scroller>	
 	</div>
 </template>
@@ -39,55 +40,68 @@
 		    SwipeoutButton,
     	},
     	methods:{
-    		getDataById(id){
-    			var that = this;
-    			jsonp('https://api.douban.com/v2/movie/subject/'+id,null,function(res,data){
-    				let obj = {};
-					obj.title = data.title;
-					obj.src = data.images.large;
-					obj.desc = data.summary;
-					obj.castsName = data.casts.map((a)=>{return a.name}).join("/");
-					that.movieList.push( obj );
-//					that.aka = data.aka.join("/");
-//					that.ratingAverage = data.rating.average/2;
-//					that.ratings_count = data.ratings_count;
-//					that.year = data.year;
-//					that.type = data.genres.join("/");
-//					that.directors = data.directors.map((a)=>{return a.name}).join("/");
-//					that.casts = data.casts;
-////					that.castsName = data.casts.map((a)=>{return a.name}).join("/");
-//					that.postUrl = data.images.large;
-//					that.summary = data.summary;
-//					that.wish_count = data.wish_count;
-//					that.collect_count = data.collect_count;
-				})
-    		},
+    		
     	},
     	created(){
-    		this.movie = JSON.parse( localStorage.getItem( "movie" ) ) || [];
-    		this.movieList = [];
-    		this.movie.forEach((item)=>{
-    			this.getDataById(item);
-    		})
-    		console.log( this.movieList );
+    		let data = JSON.parse(localStorage.getItem( "movie" ));
+//  		console.log( this.movieList );
+			this.movieList = [];
+			data.forEach( a=>{
+				for(var id in a){
+					console.log( a[id] )
+					this.movieList.push( a[id] );
+				}
+			} )
+//			console.log( this.movieList );
     	}
     }
 </script>
-<style lang="less">
+<style lang="less" scoped>
+	._v-container{
+		/*padding-bottom: 50px;*/
+	}
+	.myfilm{
+		/*height: 100%;
+		box-sizing: border-box;
+		padding-bottom: 50px;*/
+	}
 	.box{
+		padding: 5px 20px;
+		box-sizing: border-box;
 		overflow: hidden;
 		img{
 			float: left;
-			width: 40%;
+			width: 112px;
+			height: 156px;
 		}
 		.rightBox{
 			width: 50%;
 			float: right;
+			.rightBoxTitle{
+				font: 20px/2 "微软雅黑";
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
+			p{
+				font: 16px/20px "微软雅黑";
+				color: #333;
+			}
+			
 		}
 	}
+	.title{
+		text-indent: 10px;
+	}
 	.text{
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow:ellipsis;
+		overflow : hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		padding-top: 15px;
+	}
+	.height{
+		height: 53px;
 	}
 </style>

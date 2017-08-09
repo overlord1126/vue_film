@@ -54,6 +54,7 @@
     			showMore:true,
     			wish_count:0,
     			collect_count:0,
+    			//存储喜欢的电影，在此处解析成数组形式，数据形式为数组中包若干对象，对象中为 id:具体信息的形式
     			movieList : JSON.parse( localStorage.getItem( "movie" ) ) || [],
     		}
     	},
@@ -69,18 +70,17 @@
     			return {width:this.casts.length*100+"px"}
     		},
     		isCollected:function(){
-    			if( this.movieList.includes( this.$route.params.id ) ){
-    				return true;
-    			}else{
-    				return false;
-    			}
+    			let b = this.movieList.find((a)=>{
+    				return a[this.$route.params.id]
+    			})
+    			return b;
     		}
     	},
     	methods:{
     		getDataById(id){
     			var that = this;
     			jsonp('https://api.douban.com/v2/movie/subject/'+id,null,function(res,data){
-					console.log( data );
+//					console.log( data );
 					that.title = data.title;
 					that.aka = data.aka.join("/");
 					that.ratingAverage = data.rating.average/2;
@@ -89,7 +89,7 @@
 					that.type = data.genres.join("/");
 					that.directors = data.directors.map((a)=>{return a.name}).join("/");
 					that.casts = data.casts;
-//					that.castsName = data.casts.map((a)=>{return a.name}).join("/");
+					that.castsName = data.casts.map((a)=>{return a.name}).join("/");
 					that.postUrl = data.images.large;
 					that.summary = data.summary;
 					that.wish_count = data.wish_count;
@@ -101,30 +101,49 @@
     		},
     		toggleColl(){
     			let id = this.$route.params.id; 
-    			if( this.movieList.includes( id ) ){
+    			let b = this.movieList.findIndex((a)=>{
+    				return a[this.$route.params.id]
+    			})
+    			if( b != -1 ){//说明存在
 //  				删除，取消收藏
 					this.$vux.toast.show({
 						text: '取消收藏',
 						time: 800,
 					})
-    				this.movieList.splice( this.movieList.indexOf( id ),1 );
-    				this.isCollected = false;
+    				this.movieList.splice( b,1 );
     			}else{
 //  				添加,加入收藏
 					this.$vux.toast.show({
 						text: '加入收藏',
 						time: 800,
 					})
-					this.movieList.push( id );
-					this.isCollected = true;
+					let obj = {};
+					obj[id] = {};
+					obj[id].title = this.title;
+					obj[id].aka = this.aka;
+					obj[id].ratingAverage = this.ratingAverage;
+					obj[id].ratings_count = this.ratings_count;
+					obj[id].year = this.year;
+					obj[id].type = this.type;
+					obj[id].directors = this.directors;
+					obj[id].casts = this.casts;
+					obj[id].castsName = this.casts.map((a)=>{return a.name}).join("/");
+					obj[id].postUrl = this.postUrl;
+					obj[id].summary = this.summary;
+					obj[id].wish_count = this.wish_count;
+					obj[id].collect_count = this.collect_count;
+					
+					this.movieList.push( obj );
+//					console.log( localStorage );
     			}
     			let str = JSON.stringify( this.movieList );
     			localStorage.setItem( "movie",str );
-//  			console.log( localStorage );
+    			console.log( localStorage );
     		},
     	},
     	created(){
-//  		console.log( this.$route.params.id );
+//  		localStorage.clear();
+//  		console.log( localStorage );
     		this.getDataById( this.$route.params.id );
     	}
     }
