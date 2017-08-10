@@ -29,7 +29,7 @@
 			    	我的
 			    </span>
 			  </tabbar-item>
-			  <tabbar-item>
+			  <tabbar-item @click.native="clear">
 			    <img slot="icon" src="">
 			    <span slot="label">前端</span>
 			  </tabbar-item>
@@ -48,9 +48,13 @@ export default {
   	}
   },
   methods:{
-//	re(){
-//		console.log(1);
-//	}
+  	clear(){
+			localStorage.clear();
+			this.$vue.toast({
+				text:"清除缓存",
+				time:1000
+			})
+  	}
   },
   components: {
     XHeader ,

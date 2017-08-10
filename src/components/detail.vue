@@ -1,5 +1,5 @@
 <template>
-	<div class="movieBox">
+	<div class="movieBox" v-show="show" >
 		<div class="imgBox">
 			<p class="contentLeft">
 				<span class="title">{{title}}</span>
@@ -40,6 +40,7 @@
     export default {
     	data(){
     		return {
+    			show:false,
     			title:"",
     			aka:"",
     			ratingAverage:0,
@@ -80,7 +81,8 @@
     		getDataById(id){
     			var that = this;
     			jsonp('https://api.douban.com/v2/movie/subject/'+id,null,function(res,data){
-//					console.log( data );
+					console.log( data );
+					that.id = data.id;
 					that.title = data.title;
 					that.aka = data.aka.join("/");
 					that.ratingAverage = data.rating.average/2;
@@ -94,6 +96,8 @@
 					that.summary = data.summary;
 					that.wish_count = data.wish_count;
 					that.collect_count = data.collect_count;
+					that.$vux.loading.hide();
+					that.show = true;
 				})
     		},
     		jumpCast(a){
@@ -119,6 +123,7 @@
 					})
 					let obj = {};
 					obj[id] = {};
+					obj[id].id = this.id;
 					obj[id].title = this.title;
 					obj[id].aka = this.aka;
 					obj[id].ratingAverage = this.ratingAverage;
@@ -144,7 +149,11 @@
     	created(){
 //  		localStorage.clear();
 //  		console.log( localStorage );
+			this.$vux.loading.show({
+				text: 'Loading'
+			})
     		this.getDataById( this.$route.params.id );
+    		
     	}
     }
 </script>

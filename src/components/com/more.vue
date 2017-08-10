@@ -1,22 +1,13 @@
 <template>
-	<scroller 
+	<scroller v-show="show"
 		:onRefresh="re"
 		:on-infinite="loadMore"
         ref="my_scroller">
 		<div id="box">
-			<!--{{ this.$route.params.id }}-->
-			<!--<panel :header="title" :list="hotList" type="5"></panel>-->
-			<swipeout>
-				<swipeout-item v-for="(item , index) in hotList" transition-mode="follow"  key=index>
-			        <div slot="right-menu">
-			        	<swipeout-button type="primary">收藏</swipeout-button>
-			        	<swipeout-button type="warn" @click.native="del(index)">不喜欢</swipeout-button>
-			        </div>
-			        <div slot="content" class="demo-content vux-1px-t">
-			        	<panel class="pannel" :list="[hotList[index]]" type="5"></panel>
-			        </div>
-		    	</swipeout-item>
-		    </swipeout>
+			<p class="title">{{title}}</p>
+	        <div @click="jump(item.id)" class="demo-content vux-1px-t" v-for="(item , index) in list">
+	        	<panel class="pannel" :list="[list[index]]" type="5"></panel>
+	        </div>
 		</div>
 	</scroller>	
 </template>
@@ -26,8 +17,9 @@
     export default{
     	data(){
     		return {
+    			show:false,
     			title:"",
-    			hotList:[],
+    			list:[],
     			start:0,
     			count:10,
     		}
@@ -39,28 +31,38 @@
 		    SwipeoutButton,
     	},
     	methods:{
-    		del(index){
-//  			alert("删除")
-				this.hotList.splice( index,1 );
+    		jump(id){
+//  			alert(id);
+				this.$router.push({path:"/detail/"+id})
     		},
     		getData(){
     			var that = this;
 	//  		console.log(this.$route.params.id);
+				let keyWord,target;
 				if( this.$route.params.id == "hotList" ){
+					keyWord = "in_theaters";
 					this.title = "影院热映";
-					jsonp('https://api.douban.com/v2/movie/in_theaters?start='+this.start+'&count='+this.count,null,function(res,data){
+				}
+				if( this.$route.params.id == "comingList" ){
+					keyWord = "coming_soon";
+					this.title = "即将上映";
+				}
+					jsonp('https://api.douban.com/v2/movie/'+ keyWord +'?start='+this.start+'&count='+this.count,null,function(res,data){
 						console.log( data );
-						that.hotList = data.subjects.map( (item)=>{
+						that.list = data.subjects.map( (item)=>{
 							return {
 	//						链接
-							  url: item.alt,
-							  src: item.images.small,
-							  title: item.title,
-							  desc: "主演："+item.casts.map((a)=>{ return a.name }).join("、")
+//								url: item.alt,
+								id:item.id,
+								src: item.images.large,
+								title: item.title,
+								desc: "主演："+item.casts.map((a)=>{ return a.name }).join("、")
 							}
-						} )
+						} );
+						console.log( that.list );
+						that.$vux.loading.hide();
+						that.show = true;
 					})
-				}
     		},
     		re(){
     			this.start = 0;
@@ -85,22 +87,20 @@
     		}
     	},
     	created(){
-    		this.getData()
+    		this.$vux.loading.show({
+				text: 'Loading'
+			})
+    		this.getData();
     	}
     }
 </script>
-<style>
-	#box .weui-panel__hd{
-		font-size: 18px;
+<style scoped>
+	.title{
+		text-indent: 20px;
+		font: 20px/2 "微软雅黑";
 	}
-	#box .pannel .weui-media-box_appmsg,
-	#box .pannel .weui-media-box__hd,
-	#box .pannel img{
-		height: 80px;
+	.weui-media-box__hd{
+		width: 100px !important;
+		height: 130px !important;
 	}
-	/*.itemfade-enter,.itemfade-leave-active {
-	    opacity: 0;
-	    transition: 1s;
-	    position: absolute;
-	}*/
 </style>

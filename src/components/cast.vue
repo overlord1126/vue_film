@@ -1,5 +1,5 @@
 <template>
-	<div class="box">
+	<div class="box" v-show="show">
 		<header>
 			{{name}}
 		</header>
@@ -29,6 +29,7 @@
     export default {
     	data(){
     		return {
+    			show:false,
     			name:"",
     			gender:"",
     			born_place:"",
@@ -53,7 +54,9 @@
 					that.name_en = data.name_en;
 					that.photoUrl = data.avatars.medium;
 					that.works = data.works;
-					
+//					隐藏loading
+					that.$vux.loading.hide();
+					that.show = true;
 				})
     		},
     		jump(a){
@@ -61,6 +64,9 @@
     		},
     	},
     	created(){
+    		this.$vux.loading.show({
+				text: 'Loading'
+			})
     		this.getDataById(this.$route.params.id);
     	}
     }

@@ -1,6 +1,7 @@
 <template>
 	
 	<scroller 
+		v-show="show>=2"
 		:onRefresh="re"
         ref="my_scroller">
 		<div id="box">
@@ -15,6 +16,7 @@
 	export default{
 		data(){
 			return {
+				show:0,
 				hotList:[],
 				rightTitle:"更多",
 				title1:"影院热映",
@@ -64,9 +66,17 @@
 							}
 						} )
 						localStorage.setItem("hotList",JSON.stringify( that.hotList ));
+						that.show++;
+						if( that.show == 2 ){
+							that.$vux.loading.hide();
+						}
 					})
 				}else{
 					that.hotList = JSON.parse( localStorage.getItem("hotList") );
+					that.show++;
+					if( that.show == 2 ){
+						that.$vux.loading.hide();
+					}
 				}
 				
 				if( !localStorage.getItem("comingList") ){
@@ -83,14 +93,26 @@
 							}
 						} )
 						localStorage.setItem("comingList",JSON.stringify( that.comingList ));
+						that.show++;
+						if( that.show == 2 ){
+							that.$vux.loading.hide();
+						}
 					})
 				}else{
-					this.comingList = JSON.parse( localStorage.getItem("comingList") );
+					that.comingList = JSON.parse( localStorage.getItem("comingList") );
+					that.show++;
+					if( that.show == 2 ){
+						that.$vux.loading.hide();
+					}
 				}
 				
 			}
 		},
 		created(){
+//			localStorage.clear();
+			this.$vux.loading.show({
+				text:"Loading"
+			})
 			this.getData();
 		}
 	}

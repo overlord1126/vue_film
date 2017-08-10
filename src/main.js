@@ -5,6 +5,9 @@ import VueScroller from 'vue-scroller'
 import  { ToastPlugin } from 'vux'
 Vue.use(ToastPlugin)
 
+import  { LoadingPlugin } from 'vux'
+Vue.use(LoadingPlugin)
+
 Vue.use(VueScroller)
 
 import App from './App'
