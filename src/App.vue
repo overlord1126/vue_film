@@ -50,7 +50,8 @@ export default {
   methods:{
   	clear(){
 			localStorage.clear();
-			this.$vue.toast({
+			
+			this.$vux.toast.show({
 				text:"清除缓存",
 				time:1000
 			})
