@@ -6,6 +6,7 @@ import MyFilm from '@/components/myFilm'
 import More from '@/components/com/more'
 import Detail from '@/components/detail'
 import Cast from '@/components/cast'
+import Search from '@/components/search'
 
 Vue.use(Router)
 
@@ -44,6 +45,12 @@ export default new Router({
       path: '/cast/:id',
       name: 'cast',
       component: Cast
+    },
+    {
+    	//搜索
+      path: '/search',
+      name: 'search',
+      component: Search
     },
   ]
 })
