@@ -19,6 +19,12 @@ npm run build
 >
 >初始化效果
 
-建议扫描二维码查看：
+---
+
+**[预览地址-点击查看效果](https://overlord1126.github.io/vue_film/dist/#/newMovie)**
+
+
+
+建议使用手机扫描二维码：
 ----
 ![image](img.png)
