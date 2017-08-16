@@ -87,7 +87,7 @@ export default {
 //			setTimeout(()=>{
 //				img.style.display = "none";
 				that.show = true;
-//				that.$router.push("/newMovie");
+				that.$router.push("/newMovie");
 //			},2000)
 //		}
   }

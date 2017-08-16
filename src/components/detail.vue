@@ -3,7 +3,7 @@
 		<div class="imgBox">
 			<p class="contentLeft">
 				<span class="title">{{title}}</span>
-				<span class="originalTitle">又名：{{aka}}</span>
+				<span class="originalTitle">又名：{{aka||"暂无"}}</span>
 				<rater disabled :value="ratingAverage" active-color="#FF9900" :margin="0" :font-size="10"></rater>
 				<span>{{ratings_count}}人评价</span>
 				<span class="year">{{year}}年/{{type}}/{{directors}}(导演)/{{castsName}}</span>
